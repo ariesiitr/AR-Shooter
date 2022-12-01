@@ -6,6 +6,8 @@ public class SpawnScript : MonoBehaviour
 {
     public GameObject Drones;
     public Transform[] spawnpoint;
+
+    [System.Obsolete]
     void Start()
     {
         StartCoroutine(StartSpawning()); 

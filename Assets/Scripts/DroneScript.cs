@@ -14,7 +14,7 @@ public class DroneScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = Vector3.MoveTowards(transform.position, target.position, 0.02f);
+        transform.position = Vector3.MoveTowards(transform.position, target.position, 0.08f);
     }
   
 }

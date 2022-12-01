@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class CollisionScript : MonoBehaviour
 {
-    int health = 200;
-   // void OnTriggerEnter(Collider col)
-    //{
-      //  Destroy(col.gameObject);
-        //health -= 10;
-        //Debug.Log(health);
-    //}
+    int health = 300;
+   void OnTriggerEnter(Collider col)
+    {
+        Destroy(col.gameObject);
+        HealthSctipt.health -= 10;
+        Debug.Log(health);
+        Handheld.Vibrate();
+    }
     
     
   
