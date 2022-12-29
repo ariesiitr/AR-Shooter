@@ -14,15 +14,12 @@ public class ScoreScript : MonoBehaviour
     void Start()
     {
         Score.text = points.ToString() + " Points";
-       
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        Score.text = "Score : " + points;
-       
-        
+        Score.text = points.ToString();
     }
 }

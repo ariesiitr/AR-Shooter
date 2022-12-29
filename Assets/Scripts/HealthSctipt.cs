@@ -5,19 +5,24 @@ using UnityEngine.UI;
 
 public class HealthSctipt : MonoBehaviour
 {
-    public Text Health;
-    public static int health = 100;
+    Slider _healthSlider;
+    internal static int Maxhealth =100;
+
+    private void Start()
+    {
+        _healthSlider = GetComponent<Slider>();
+       
+    }
     // Start is called before the first frame update
-    void Start()
+    public void SetMaxHealth(int Maxhealth)
     {
-        Health.text = health.ToString() + "Health";
-
+        _healthSlider.maxValue = Maxhealth;
+        _healthSlider.value = Maxhealth;
     }
-
-    // Update is called once per frame
-    void Update()
+    public void SetHealth(int health)
     {
-        Health.text = "Health :" + health;
-
+        _healthSlider.value = health;
     }
+    
+    
 }

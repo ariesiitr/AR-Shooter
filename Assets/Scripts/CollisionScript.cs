@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class CollisionScript : MonoBehaviour
 {
-    int health = 300;
+    public int health = HealthSctipt.Maxhealth;
+    [SerializeField] HealthSctipt _healthbar;
    void OnTriggerEnter(Collider col)
     {
         Destroy(col.gameObject);
-        HealthSctipt.health -= 10;
-        Debug.Log(health);
+        health -= 10;
+        _healthbar.SetHealth(health);
         Handheld.Vibrate();
     }
     
