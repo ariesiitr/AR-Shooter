@@ -23,6 +23,10 @@ public class HealthSctipt : MonoBehaviour
     {
         _healthSlider.value = health;
     }
+    public float GetHealth()
+    {
+        return _healthSlider.value;
+    }
     
     
 }

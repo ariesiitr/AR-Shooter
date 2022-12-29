@@ -5,16 +5,23 @@ using UnityEngine;
 public class DroneScript : MonoBehaviour
 {
     Vector3 Current;
-    
+    float time;
+
     private Transform target;
     private void Awake()
     {
         target = Camera.main.transform;
     }
+
     // Update is called once per frame
+    [System.Obsolete]
     void Update()
     {
-        transform.position = Vector3.MoveTowards(transform.position, target.position, 0.08f);
+        time += Time.deltaTime / 1500;
+        float p = Random.RandomRange(0.06f, 0.09f)+time;
+        Debug.Log(p);
+        
+        transform.position = Vector3.MoveTowards(transform.position, target.position, p);
     }
   
 }

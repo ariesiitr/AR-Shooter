@@ -16,9 +16,9 @@ public class SpawnScript : MonoBehaviour
     [System.Obsolete]
     IEnumerator StartSpawning()
     {
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(2);
 
-        int i = Random.RandomRange(0, 4);
+        int i = Random.RandomRange(0, 8);
             Instantiate(Drones, spawnpoint[i].position, Quaternion.identity);
             StartCoroutine(StartSpawning());
         

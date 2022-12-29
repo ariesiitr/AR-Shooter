@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(LineRenderer))]
 
@@ -15,14 +16,16 @@ public class RayCastGun : MonoBehaviour
     public GameObject smoke;
     public AudioSource sound;
     LineRenderer laserLine;
-    
-  
-  
+    bool playing = false;
+    [SerializeField] HealthSctipt _healthbar;
+    [SerializeField] ScoreScript _scorescript;
+
 
     void Awake()
     {
         laserLine = GetComponent<LineRenderer>();
         sound = GetComponent<AudioSource>();
+        playing = true;
     }
 
     [System.Obsolete]
@@ -37,11 +40,10 @@ public class RayCastGun : MonoBehaviour
        
         if (Physics.Raycast(arCamera.transform.position, arCamera.transform.forward, out hit))
         {
-            Debug.Log("raycast");
-            
-            ScoreScript.points += 1;
+            Debug.Log("raycast"); 
+           _scorescript.AddScore();
             Destroy(hit.transform.gameObject);
-            AudioSource.PlayClipAtPoint(sound.clip, hit.point);
+            AudioSource.PlayClipAtPoint(sound.clip,rayOrigin);
             Instantiate(smoke, hit.point, Quaternion.LookRotation(hit.normal));
         }
         if (Physics.Raycast(rayOrigin, playerCamera.transform.forward, out hit, gunRange))
@@ -55,22 +57,31 @@ public class RayCastGun : MonoBehaviour
         }
         StartCoroutine(ShootLaser());
     }
-        
 
 
-        
 
-      /*  void Update()
+
+
+    void Update()
+    {
+        float val = _healthbar.GetHealth();
+        if (val<= 0)
         {
-            
-            if (Input.GetButtonDown("Fire1") && fireTimer > fireRate)
-            {
-               
-                
-            }
-        }*/
+            Debug.Log("ded");
+            playing = false;
+            Vector3 finalpos = arCamera.transform.position;
+            AudioSource.PlayClipAtPoint(sound.clip,finalpos);
+            PlayerPrefs.SetFloat("Score", _scorescript.getScore());
+            SceneManager.LoadScene("GAME_OVER");
 
-        IEnumerator ShootLaser()
+        }
+    }
+      public bool isPlaying()
+    {
+        return playing;
+    }
+
+    IEnumerator ShootLaser()
         {
             laserLine.enabled = true;
             yield return new WaitForSeconds(laserDuration);
