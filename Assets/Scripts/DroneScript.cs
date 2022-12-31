@@ -19,7 +19,7 @@ public class DroneScript : MonoBehaviour
     {
         time += Time.deltaTime / 1500;
         float p = Random.RandomRange(0.06f, 0.09f)+time;
-        Debug.Log(p);
+       // Debug.Log(p);
         
         transform.position = Vector3.MoveTowards(transform.position, target.position, p);
     }

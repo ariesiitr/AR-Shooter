@@ -19,52 +19,87 @@ public class RayCastGun : MonoBehaviour
     bool playing = false;
     [SerializeField] HealthSctipt _healthbar;
     [SerializeField] ScoreScript _scorescript;
+    [SerializeField] AmmoScript _ammobar;
+    public float ammo = AmmoScript.MaxAmmo;
+     public bool ammoavailiable;
+    public float start =10;
+    public float end = 10;
 
-
-    void Awake()
+    public void Awake()
     {
         laserLine = GetComponent<LineRenderer>();
         sound = GetComponent<AudioSource>();
         playing = true;
+        ammoavailiable = true;
     }
-
+    public void Start()
+    {
+        _ammobar.SetAmmo(AmmoScript.MaxAmmo);
+    }
+    
     [System.Obsolete]
     public void Shoot()
     {
-        RaycastHit hit;
-       
-        laserLine.SetPosition(0, laserOrigin.position);
-      
+        ammo = _ammobar.GetAmmo();
+        //Debug.Log("shootbuton" + ammo);
+        if (ammo <=0)
+        {
+            ammoavailiable = false;
+           
+        }
+        else if (ammo > 0)
+        {
+            ammoavailiable = true;
+        }
 
-        Vector3 rayOrigin = playerCamera.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0));
-       
-        if (Physics.Raycast(arCamera.transform.position, arCamera.transform.forward, out hit))
+        if (ammoavailiable)
         {
-            Debug.Log("raycast"); 
-           _scorescript.AddScore();
-            Destroy(hit.transform.gameObject);
-            AudioSource.PlayClipAtPoint(sound.clip,rayOrigin);
-            Instantiate(smoke, hit.point, Quaternion.LookRotation(hit.normal));
-        }
-        if (Physics.Raycast(rayOrigin, playerCamera.transform.forward, out hit, gunRange))
-        {
-            laserLine.SetPosition(1, hit.point);
+           // Debug.Log("ammo>0");
+           // Debug.Log(ammo);
+            RaycastHit hit;
 
+            laserLine.SetPosition(0, laserOrigin.position);
+            Vector3 rayOrigin = playerCamera.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0));
+
+            if (Physics.Raycast(arCamera.transform.position, arCamera.transform.forward, out hit))
+            {
+                Debug.Log("raycast");
+                _scorescript.AddScore();
+                Destroy(hit.transform.gameObject);
+                AudioSource.PlayClipAtPoint(sound.clip, rayOrigin);
+                Instantiate(smoke, hit.point, Quaternion.LookRotation(hit.normal));
+            }
+            if (Physics.Raycast(rayOrigin, playerCamera.transform.forward, out hit, gunRange))
+            {
+               
+                laserLine.SetPosition(1, hit.point);
+
+            }
+            else
+            {
+              
+                laserLine.SetPosition(1, rayOrigin + (playerCamera.transform.forward * gunRange));
+            }
+            StartCoroutine(ShootLaser());
+            
+           // Debug.Log("value set to"+ ammo);
         }
-        else
-        {
-            laserLine.SetPosition(1, rayOrigin + (playerCamera.transform.forward * gunRange));
-        }
-        StartCoroutine(ShootLaser());
+        ammo--;
+        _ammobar.SetAmmo(ammo);
+      //  Debug.Log("ammo set to" + ammo);
+       
     }
 
 
 
 
-
+    
     void Update()
     {
+        //Debug.Log("ammo from amoscript"+_ammobar.GetAmmo()+" " +ammo);
+        // Debug.Log( ammo.ToString() +ammoavailiable);
         float val = _healthbar.GetHealth();
+       
         if (val<= 0)
         {
             Debug.Log("ded");
@@ -75,18 +110,24 @@ public class RayCastGun : MonoBehaviour
             SceneManager.LoadScene("GAME_OVER");
 
         }
+
     }
       public bool isPlaying()
     {
         return playing;
     }
 
+   
     IEnumerator ShootLaser()
         {
-            laserLine.enabled = true;
+            if (ammoavailiable)
+            {
+                laserLine.enabled = true;
+         
             yield return new WaitForSeconds(laserDuration);
-            laserLine.enabled = false;
+                laserLine.enabled = false;
+            }
         }
     }
-
+  
 
